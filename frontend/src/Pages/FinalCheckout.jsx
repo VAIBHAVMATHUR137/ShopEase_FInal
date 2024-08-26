@@ -36,7 +36,7 @@ function FinalCheckout() {
           "Content-Type": "application/json",
         },
         credentials: 'include',
-        mode: 'cors',
+      
       });
 
       if (!response.ok) {

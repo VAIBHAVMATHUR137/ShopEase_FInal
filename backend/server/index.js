@@ -11,12 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: "https://shopease137.vercel.app",
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
-app.options('*', cors()); // handle pre-flight requests
+app.options('*', cors());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
