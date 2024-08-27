@@ -25,7 +25,7 @@ function FinalCheckout() {
       currency = "INR";
       const receipt = "qwsaq1"; 
 
-      const response = await fetch("https://shopeasebackend-9drb3kid7-vaibhav-mathurs-projects.vercel.app/order", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/order`, {
         method: "POST",
         body: JSON.stringify({
           amount,
