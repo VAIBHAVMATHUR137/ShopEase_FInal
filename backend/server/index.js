@@ -10,20 +10,8 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors({
-  origin: "https://frontend-4u4iqt2v4-vaibhav-mathurs-projects.vercel.app/",
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
-app.options('*', cors());
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  next();
-});
+app.use(cors());
+
 app.get("/", (req, res) => {
   res.send("Shopease Backend is running!");
 });
@@ -35,7 +23,7 @@ app.post("/order", async (req, res) => {
       key_secret: process.env.RAZORPAY_SECRET_KEY,
     });
     const options = req.body;
-    const order = await razorpay.orders.create(options); // Use the razorpay instance
+    const order = await razorpay.orders.create(options); 
     if (!order) {
       return res.status(500).send("Error creating order");
     }
