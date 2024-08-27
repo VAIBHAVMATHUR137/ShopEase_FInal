@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-  origin: "https://frontend-r9mnwb2rs-vaibhav-mathurs-projects.vercel.app/",
+  origin: "https://frontend-4u4iqt2v4-vaibhav-mathurs-projects.vercel.app/",
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
