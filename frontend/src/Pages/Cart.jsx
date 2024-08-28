@@ -1,25 +1,18 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import CartContext from "../context/CartContext";
-import Card from "@mui/material/Card";
-import { useNavigate } from "react-router-dom";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import DeleteIcon from "@mui/icons-material/Delete";
-
 import DialogBox from "../components/Dialog";
+import { Card, CardContent, CardMedia, Button, Typography, Box } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Cart() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [title, setTitle] = useState();
-  const [message, setMessage] = useState();
-  let { cart, removeFromCart, resetCart, sum, userData } =
-    useContext(CartContext);
-
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const { cart, removeFromCart, resetCart, sum, userData } = useContext(CartContext);
   const navigate = useNavigate();
+
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
   const putTitle = (heading) => setTitle(heading);
@@ -36,109 +29,60 @@ function Cart() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <Box display="flex" justifyContent="space-around" px={1}>
-        <Box width="55%">
-          <div className="p-2">
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-              <Box display="flex" flexDirection="column" alignItems="stretch">
-                {cart.length === 0 ? (
-                  <>
-                    <h1 className="text-3xl font-bold mb-4" align='center'>Cart is empty</h1>
-                  </>
-                ) : (
-                  cart.map((item) => (
-                    <li
-                      key={item.id}
-                      style={{ marginBottom: "20px", width: "100%" }}
-                    >
-                      <Card
-                        sx={{ width: "100%", marginBottom: 2 }}
-                        onClick={() =>
-                          navigate(`/ProductListing/Product/${item.id}`)
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        <Box display="flex" justifyContent="space-between">
-                          <CardMedia
-                            sx={{ height: 200, width: "50%" }}
-                            image={item.Image}
-                            title={item.Name}
-                          />
-                          <CardContent
-                            sx={{
-                              width: "30%",
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <div>
-                              <Typography
-                                gutterBottom
-                                variant="h5"
-                                component="div"
-                              >
-                                {item.Name}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                              >
-                                ₹{item.Price} ({item.quantity})
-                              </Typography>
-                            </div>
-                            <Button
-                              variant="contained"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeFromCart(item.id);
-                              }}
-                            >
-                              Remove
-                            </Button>
-                          </CardContent>
-                          <Box
-                            sx={{
-                              width: "20%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              borderLeft: "1px solid #e0e0e0",
-                            }}
-                          >
-                            <Typography
-                              variant="h6"
-                              component="div"
-                              align="center"
-                            >
-                              Total: ₹{(item.Price * item.quantity).toFixed(2)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Card>
-                    </li>
-                  ))
-                )}
-              </Box>
+      <div className="flex flex-col md:flex-row justify-between p-4 flex-grow">
+        <div className="w-full md:w-3/5 mb-4 md:mb-0">
+          {cart.length === 0 ? (
+            <Typography variant="h4" align="center" className="mt-8">
+              Cart is empty
+            </Typography>
+          ) : (
+            <ul className="space-y-4">
+              {cart.map((item) => (
+                <li key={item.id}>
+                  <Card className="w-full">
+                    <div className="flex flex-col sm:flex-row">
+                      <CardMedia
+                        component="img"
+                        image={item.Image}
+                        alt={item.Name}
+                        className="h-48 sm:h-auto sm:w-1/3 object-cover"
+                      />
+                      <CardContent className="flex-grow p-4">
+                        <Typography variant="h6" component="div" className="mb-2">
+                          {item.Name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" className="mb-2">
+                          ₹{item.Price} (Qty: {item.quantity})
+                        </Typography>
+                        <Typography variant="subtitle1" className="mb-2">
+                          Total: ₹{(item.Price * item.quantity).toFixed(2)}
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          onClick={() => removeFromCart(item.id)}
+                          size="small"
+                        >
+                          Remove
+                        </Button>
+                      </CardContent>
+                    </div>
+                  </Card>
+                </li>
+              ))}
             </ul>
-          </div>
-        </Box>
+          )}
+        </div>
 
         {cart.length > 0 && (
-          <Box width="30%" mt={2}>
-            <Card elevation={3}>
+          <div className="w-full md:w-1/3">
+            <Card elevation={3} className="sticky top-4">
               <CardContent>
                 <Button
                   fullWidth
                   variant="contained"
-                  style={{
-                    backgroundColor: "#6348a1",
-                    color: "#ffffff",
-                    marginBottom: "20px",
-                    borderRadius: "20px",
-                  }}
+                  className="mb-4 rounded-full bg-purple-700 hover:bg-purple-800"
                   onClick={checkoutAuthentication}
                 >
                   Proceed to Payment
@@ -147,45 +91,41 @@ function Cart() {
                 <Typography variant="h6" gutterBottom>
                   Order Summary
                 </Typography>
-                <Box display="flex" justifyContent="space-between" mb={1}>
-                  <Typography>Items:</Typography>
-                  <Typography>
-                    {cart.map((product) => (
-                      <li key={product.id}>
-                        {product.Name} X {product.quantity}
-                      </li>
-                    ))}
-                  </Typography>
-                </Box>
+                <ul className="mb-4 list-disc pl-5">
+                  {cart.map((product) => (
+                    <li key={product.id}>
+                      {product.Name} x {product.quantity}
+                    </li>
+                  ))}
+                </ul>
 
-                <Box display="flex" justifyContent="space-between" mt={2}>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                <div className="flex justify-between items-center mt-4">
+                  <Typography variant="h6" className="font-bold">
                     Order Total:
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    style={{ fontWeight: "bold", color: "#B12704" }}
-                  >
+                  <Typography variant="h6" className="font-bold text-red-700">
                     ₹{sum.toFixed(2)}
                   </Typography>
-                </Box>
+                </div>
               </CardContent>
             </Card>
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
+
       {cart.length > 0 && (
-        <div style={{ marginTop: "20px" }} align="center">
+        <div className="text-center mt-6 mb-8">
           <Button
             variant="contained"
             onClick={resetCart}
-            style={{ marginRight: "20px", backgroundColor: "#b32222" }}
+            className="bg-red-600 hover:bg-red-700"
+            startIcon={<DeleteIcon />}
           >
             Clear Cart
-            <DeleteIcon />
           </Button>
         </div>
       )}
+
       <DialogBox
         isOpen={isDialogOpen}
         onClose={closeDialog}
